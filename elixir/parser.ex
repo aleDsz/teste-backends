@@ -37,6 +37,9 @@ defmodule Parser do
           map = generate_struct(line, module)
           {:cont, {:ok, structs ++ [map]}}
 
+        [""] ->
+          {:cont, {:ok, structs}}
+
         _ ->
           {:cont, {:error, "Unexpected format"}}
       end
