@@ -8,15 +8,18 @@ defmodule Parser do
     timestamp: :datetime
   ]
 
-  def decode!(file_data) do
-    file_data
+  def decode!({file, data}) do
+    data
     |> String.split("\n")
     |> Enum.map(&String.split(&1, ","))
     |> generate_structs()
     |> case do
       {:ok, structs} ->
-        structs
-        |> List.flatten()
+        data =
+          structs
+          |> List.flatten()
+
+        {file, data}
 
       {:error, reason} ->
         raise reason
