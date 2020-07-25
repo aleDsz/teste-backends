@@ -1,6 +1,7 @@
 defmodule Main do
   require Logger
-  @folder "../test/input"
+  @folder "../test"
+  @numbers [8]
 
   def run() do
     autoload()
@@ -33,11 +34,23 @@ defmodule Main do
     end)
   end
 
-  defp load_files() do
-    File.ls!(@folder)
-    |> Enum.map(fn file ->
-      File.read!("#{@folder}/#{file}")
+  defp load_files(type \\ :input) do
+    type = type |> to_string()
+    folder = "#{@folder}/#{type}"
+
+    @numbers
+    |> Enum.map(fn i ->
+      file_name =
+        to_string(i)
+        |> String.pad_leading(3, ["0"])
+
+      file_name = "#{type}#{file_name}.txt"
+
+      data = File.read!("#{folder}/#{file_name}")
+      {file_name, data}
     end)
+  end
+
   end
 end
 
