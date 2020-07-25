@@ -1,7 +1,7 @@
 defmodule Main do
   require Logger
   @folder "../test"
-  @numbers [8]
+  @numbers 0..12
 
   def run() do
     autoload()
