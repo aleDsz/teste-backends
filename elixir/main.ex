@@ -54,6 +54,48 @@ defmodule Main do
     end)
   end
 
+  defp check_results(outputs, inputs) do
+    [
+      inputs, outputs
+    ]
+    |> Enum.zip()
+    |> Enum.reduce_while({:ok, []}, fn {input, output}, {:ok, result} ->
+      {input_file, input} = input
+      {output_file, output} = output
+
+      if input != output do
+        """
+        [#{__MODULE__}] The input is not equal than output
+
+        #{input_file}:
+        #{inspect input}
+
+        #{output_file}:
+        #{inspect output}
+        """
+        |> Logger.error()
+
+        {:cont, {:ok, result}}
+      else
+        """
+        #{input_file}:
+        #{inspect input}
+
+        #{output_file}:
+        #{inspect output}
+        """
+        |> Logger.info()
+
+        {:cont, {:ok, result ++ [{input}]}}
+      end
+    end)
+    |> case do
+      {:error, _reason} ->
+        raise "Invalid tests"
+
+      {:ok, _response} ->
+        :ok
+    end
   end
 end
 
