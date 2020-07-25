@@ -6,12 +6,15 @@ defmodule Main do
   def run() do
     autoload()
 
+    outputs = load_files(:output)
 
     result =
       load_files()
       |> Enum.map(&Parser.decode!/1)
       |> Enum.into(%{})
       |> Enum.map(&Processor.start/1)
+
+    check_results(outputs, result)
   end
 
   defp autoload() do
